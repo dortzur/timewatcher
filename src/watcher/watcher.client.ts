@@ -25,16 +25,21 @@ const createClient = () => {
   return client;
 };
 const login = async (user: User) => {
+  if (!user || !user.company || !user.name || !user.password)
+    throw new Error('All user fields must be defined');
+
   const client = createClient();
   const params = qs.stringify(getLoginParams(user));
   const response = await client.post(LOGIN_PATH, params, {
     withCredentials: true,
   });
-  const cookies = response.headers['set-cookie'].join(';');
   const result = authTokenRegex.exec(response.data);
   if (!result || !result[1]) {
     throw new Error('Login Failed');
   }
+
+  const cookies = response.headers['set-cookie'].join(';');
+
   const authToken = result[1];
   return { client, cookies, authToken };
 };
