@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { User } from './user.interface';
-// import { AxiosInstance } from 'axios';
+
+import { WatcherClient } from './watcher.client';
 
 @Injectable()
 export class WatcherService {
-  // private async login(user: User) {}
+  constructor(private checkinClient: WatcherClient) {}
 
-  checkIn(user: User) {
-    return 'checkout';
+  checkin(user: User) {
+    return this.checkinClient.checkin(user);
   }
 
-  checkOut(user: User) {
-    return 'checkout';
+  checkout(user: User) {
+    return this.checkinClient.checkout(user);
   }
 }

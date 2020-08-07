@@ -3,13 +3,15 @@ import qs from 'qs';
 import * as AxiosLogger from 'axios-logger';
 import { BASE_CLIENT_PARAMS, CheckinStatus, getCheckinStatusParams, getLoginParams } from './watcher.params';
 import { User } from './user.interface';
+import { Injectable } from '@nestjs/common';
+
 
 const authTokenRegex = /ixee: (.*)}/;
 const LOGIN_PATH = '/punch2.php';
 const CHECKIN_STATUS_PATH = '/punch3.php';
 AxiosLogger.setGlobalConfig({ headers: true });
 
-export class CheckinClient {
+class UserCheckin {
   constructor(user: User) {
     this.user = user;
     this.client = axios.create(BASE_CLIENT_PARAMS);
@@ -49,4 +51,10 @@ export class CheckinClient {
 }
 
 
+
+@Injectable()
+export class WatcherClient {
+  checkin = (user: User) => new UserCheckin(user).checkin();
+  checkout = (user: User) => new UserCheckin(user).checkout();
+}
 
