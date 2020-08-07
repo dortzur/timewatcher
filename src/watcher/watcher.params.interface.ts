@@ -15,5 +15,5 @@ export interface LoginParams {
 export interface UserAuth {
   user: string;
   company: string;
-  ixee: string;
+  authToken: string;
 }

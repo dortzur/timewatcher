@@ -7,12 +7,14 @@ import {
   UserAuth,
 } from './watcher.params.interface';
 
-enum CheckinStatus {
+export enum CheckinStatus {
   Checkin = 'checking',
   Checkout = 'checkout',
 }
+
 export const BASE_CLIENT_PARAMS = {
   baseURL: 'https://checkin.timewatch.co.il/punch',
+  withCredentials: true,
   headers: {
     Host: 'checkin.timewatch.co.il',
     Accept: 'application/json, text/javascript, */*; q=0.01',
@@ -38,28 +40,31 @@ const CONST_CHECKIN_STATUS_PARAMS = {
   withtasks: '0',
 };
 
-const getDynamicCheckinStatusParams = (userAuth: UserAuth): DynamicParams => ({
-  name: userAuth.user,
-  comp: userAuth.company,
-  ts: format(new Date(), '2006-01-02 15:04:05'),
-  ix: userAuth.ixee,
+const getDynamicCheckinStatusParams = (
+  user: User,
+  authToken: string
+): DynamicParams => ({
+  name: user.name,
+  comp: user.company,
+  ts: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+  ix: authToken,
 });
 
-const getCheckinStatusParams = (
-  userAuth: UserAuth,
+export const getCheckinStatusParams = (
+  user: User,
+  authToken: string,
   checkinStatus: CheckinStatus
-) => ({
-  ...CONST_CHECKIN_STATUS_PARAMS,
-  ...getDynamicCheckinStatusParams(userAuth),
-  B1: checkinStatus === CheckinStatus.Checkin ? 'כניסה' : 'יציאה',
-  tflag: checkinStatus === CheckinStatus.Checkin ? '' : '1',
-});
-export const getCheckinParams = (userAuth: UserAuth) =>
-  getCheckinStatusParams(userAuth, CheckinStatus.Checkin);
-
-export const getCheckoutParams = (userAuth: UserAuth) =>
-  getCheckinStatusParams(userAuth, CheckinStatus.Checkout);
-
+) => {
+  if (!authToken) throw new Error('auth token must be defined');
+  if (!user || !user.name || !user.company)
+    throw new Error('user and company must be defined');
+  return {
+    ...CONST_CHECKIN_STATUS_PARAMS,
+    ...getDynamicCheckinStatusParams(user, authToken),
+    B1: checkinStatus === CheckinStatus.Checkin ? 'כניסה' : 'יציאה',
+    tflag: checkinStatus === CheckinStatus.Checkin ? '' : '1',
+  };
+};
 export const getLoginParams = (user: User): LoginParams => ({
   comp: user.company,
   name: user.name,
