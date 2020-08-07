@@ -1,11 +1,7 @@
-import { format } from 'date-fns';
+import { format, addHours } from 'date-fns';
 import { User } from './user.interface';
 import randomInt from 'random-int';
-import {
-  DynamicParams,
-  LoginParams,
-  UserAuth,
-} from './watcher.params.interface';
+import { DynamicParams, LoginParams } from './watcher.params.interface';
 
 export enum CheckinStatus {
   Checkin = 'checking',

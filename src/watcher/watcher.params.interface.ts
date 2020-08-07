@@ -11,9 +11,3 @@ export interface LoginParams {
   'B1.x': string;
   'B1.y': string;
 }
-
-export interface UserAuth {
-  user: string;
-  company: string;
-  authToken: string;
-}
