@@ -30,7 +30,7 @@
     "compression": "^1.7.4",
     "date-fns": "^2.15.0",
     "form-data": "^3.0.0",
-    "qs": "^6.9.4",
+    "qs": "^6.9.7",
     "random-int": "^2.0.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
